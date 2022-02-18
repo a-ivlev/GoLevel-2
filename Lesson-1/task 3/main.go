@@ -27,7 +27,7 @@ func getEnvInt64(env string, defaultVault int64) int64 {
 }
 
 var (
-	ErrNubberFileNegative = errors.New("number of files cannot be negative")
+	ErrNumberFileNegative = errors.New("number of files cannot be negative")
 	ErrFileCreate         = errors.New("file creation failed")
 	ErrFileClose          = errors.New("file close error")
 	ErrWriteFile          = errors.New("file write error")
@@ -60,7 +60,7 @@ func main() {
 	}
 
 	if numberFiles < 0 {
-		fmt.Println(ErrNubberFileNegative)
+		fmt.Println(ErrNumberFileNegative)
 		return
 	}
 
