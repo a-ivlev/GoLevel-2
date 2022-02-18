@@ -64,23 +64,25 @@ func main() {
 		return
 	}
 
+	var fd *os.File
+	defer func() {
+		err = fd.Close()
+		if err != nil {
+			err = fmt.Errorf("%w: %s", ErrFileClose, err.Error())
+			fmt.Println(err)
+			return
+		}
+	}()
+
 	for i := int64(1); i <= numberFiles; i++ {
-		f, err := os.Create(fmt.Sprintf("%s/file-%d.txt", pathDir, i))
+		fd, err = os.Create(fmt.Sprintf("%s/file-%d.txt", pathDir, i))
 		if err != nil {
 			err = fmt.Errorf("%w: %s", ErrFileCreate, err.Error())
 			fmt.Println(err)
 			break
 		}
-		defer func() {
-			err = f.Close()
-			if err != nil {
-				err = fmt.Errorf("%w: %s", ErrFileClose, err.Error())
-				fmt.Println(err)
-				return
-			}
-		}()
 
-		_, err = fmt.Fprintln(f, fmt.Sprintf("data: %s/file-%d.txt", pathDir, i))
+		_, err = fmt.Fprintln(fd, fmt.Sprintf("data: %s/file-%d.txt", pathDir, i))
 		if err != nil {
 			err = fmt.Errorf("%w: %s", ErrWriteFile, err)
 			fmt.Println(err)
