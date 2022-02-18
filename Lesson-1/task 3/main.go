@@ -36,5 +36,56 @@ var (
 )
 
 func main() {
+	defer func() {
+		if p := recover(); p != nil {
+			fmt.Println("panic:", p)
+		}
+	}()
+	pathDir := *flag.String("dir", getEnvString("PATH_DIRECTORY", "/tmp/lesson-1"), "path to the directory, where the files will be created")
+	numberFiles := *flag.Int64("n", getEnvInt64("NUMBER_FILES", 10), "number of files created")
+	flag.Parse()
 
+	_, err := ioutil.ReadDir(pathDir)
+	if err != nil {
+		err = fmt.Errorf("%w: %s", ErrReadDirectory, err.Error())
+		fmt.Println(err)
+	}
+
+	if errors.Is(err, ErrReadDirectory) {
+		err = os.Mkdir(pathDir, 0777)
+		if err != nil {
+			err = fmt.Errorf("%w: %s", ErrCreateDirectory, err.Error())
+			fmt.Println(err)
+		}
+	}
+
+	if numberFiles < 0 {
+		fmt.Println(ErrNubberFileNegative)
+		return
+	}
+
+	for i := int64(1); i <= numberFiles; i++ {
+		f, err := os.Create(fmt.Sprintf("%s/file-%d.txt", pathDir, i))
+		if err != nil {
+			err = fmt.Errorf("%w: %s", ErrFileCreate, err.Error())
+			fmt.Println(err)
+			break
+		}
+		defer func() {
+			err = f.Close()
+			if err != nil {
+				err = fmt.Errorf("%w: %s", ErrFileClose, err.Error())
+				fmt.Println(err)
+				return
+			}
+		}()
+
+		_, err = fmt.Fprintln(f, fmt.Sprintf("data: %s/file-%d.txt", pathDir, i))
+		if err != nil {
+			err = fmt.Errorf("%w: %s", ErrWriteFile, err)
+			fmt.Println(err)
+			break
+		}
+		fmt.Printf("file-%d.txt created\n", i)
+	}
 }
