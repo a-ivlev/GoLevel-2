@@ -36,11 +36,6 @@ var (
 )
 
 func main() {
-	defer func() {
-		if p := recover(); p != nil {
-			fmt.Println("panic:", p)
-		}
-	}()
 	pathDir := flag.String("dir", getEnvString("PATH_DIRECTORY", "/tmp/lesson-1"), "path to the directory, where the files will be created")
 	numberFiles := flag.Int64("n", getEnvInt64("NUMBER_FILES", 1), "number of files created")
 	flag.Parse()
