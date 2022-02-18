@@ -70,7 +70,7 @@ func main() {
 	}()
 
 	for i := int64(1); i <= *numberFiles; i++ {
-		fd, err = os.Create(fmt.Sprintf("%s/file-%d.txt", *pathDir, i))
+		fd, err = os.OpenFile(fmt.Sprintf("%s/file-%d.txt", *pathDir, i), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 		if err != nil {
 			err = fmt.Errorf("%w: %s", ErrFileCreate, err.Error())
 			fmt.Println(err)
