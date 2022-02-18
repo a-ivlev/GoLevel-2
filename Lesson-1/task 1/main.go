@@ -11,7 +11,7 @@ func implicitPanic() {
 func main() {
 	defer func() {
 		if v := recover(); v != nil {
-			fmt.Println("recovered:", v)
+			fmt.Println("panic recovered:", v)
 		}
 	}()
 
