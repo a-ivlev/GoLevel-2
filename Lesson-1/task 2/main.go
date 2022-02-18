@@ -24,6 +24,7 @@ func main() {
 
 	err := implicitPanic(0)
 	if err != nil {
-		fmt.Println(err)
+		err = fmt.Errorf("%w: %s", ErrCalculation, err.Error())
+		fmt.Println("print err:", err)
 	}
 }
