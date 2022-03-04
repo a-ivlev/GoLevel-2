@@ -1,0 +1,18 @@
+// Демонстрация работы контекста вариант: Передача значений по контексту.
+
+package main
+
+import (
+	"context"
+	"fmt"
+)
+
+func main() {
+	ctx0 := context.WithValue(context.Background(), "key", "value")
+	ctx1 := context.WithValue(ctx0, "key", "value1")
+	ctx2 := context.WithValue(ctx1, "Geek", "Brains")
+
+	fmt.Println("ctx0 key =", ctx0.Value("key"))
+	fmt.Println("ctx1 key =", ctx1.Value("key"))
+	fmt.Println("ctx2 key =", ctx2.Value("key"), "ctx2 Geek =", ctx2.Value("Geek"))
+}
