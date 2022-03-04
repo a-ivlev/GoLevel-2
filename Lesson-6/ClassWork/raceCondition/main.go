@@ -1,6 +1,8 @@
 // Программа будет корректно работать без WaitGroup,
 // если запустить её на 1 процессоре, следующей командой:
 // GOMAXPROCS=1 go run main.go
+// Трассировку работы планировщика можно посмотреть следующей командой:
+// GODEBUG=schedtrace=100 GOMAXPROCS=2 go run ClassWork/raceCondition/main.go
 package main
 
 import (
@@ -10,15 +12,17 @@ import (
 
 func main() {
 	// Создаём WaitGroup
-	wg := *&sync.WaitGroup{}
+	wg := &sync.WaitGroup{}
 
-	// Инкрементируем значение счётчика WaitGroup на 1,
-	// т.к. запускается 1 горутина.
-	wg.Add(1)
+	// Инкрементируем счётчик WaitGroup на 2,
+	// т.к. будем запускать две горутины.
+	wg.Add(2)
 	go func() {
+		// После завершения работы данной горутины,
+		// декрементируем счётчик WaitGroup.
 		defer wg.Done()
 		for c := 'a'; c <= 'z'; c += 1 {
-			fmt.Printf("%c\n", c)
+			fmt.Printf("%c", c)
 		}
 
 	}()
@@ -27,9 +31,11 @@ func main() {
 	// т.к. запускается ещё одна горутина.
 	wg.Add(1)
 	go func() {
+		// После завершения работы данной горутины,
+		// декрементируем счётчик WaitGroup.
 		defer wg.Done()
 		for i := 0; i < 10; i += 1 {
-			fmt.Printf("%d\n", i)
+			fmt.Printf("%d", i)
 		}
 	}()
 
