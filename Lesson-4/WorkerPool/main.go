@@ -51,13 +51,6 @@ func (wp *WorkerPool) Close() {
 	wp.wg.Wait()
 }
 
-// func printNum(i int) func() {
-// 	return func() {
-// 		fmt.Printf("I'm printing i = %d\n", i)
-// 	}
-
-// }
-
 func printNum(i int) string {
 	return fmt.Sprintf("%d", i)
 }
