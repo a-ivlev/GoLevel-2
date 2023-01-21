@@ -1,5 +1,7 @@
 package main_test
 
+import "fmt"
+
 func Example() {
 	// chIn канал в который будут писатся числа из массива.
 	chIn := make(chan int64)
@@ -8,7 +10,6 @@ func Example() {
 
 	// массив чисел.
 	array := []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-
 
 	WriteCh(array, chIn)
 	MultBy2(chIn, chOut)
