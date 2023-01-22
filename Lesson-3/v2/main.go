@@ -7,7 +7,7 @@ import (
 	_ "github.com/valyala/fasthttp"
 )
 
-const version="v1.0.1"
+const version = "2.0.2"
 
 func main() {
 	fmt.Printf("Project version %s", version)
