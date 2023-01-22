@@ -1,4 +1,4 @@
-package geekbrains_go_module
+package main
 
 import (
 	_ "github.com/gorilla/websocket"
@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-
+	
 }
