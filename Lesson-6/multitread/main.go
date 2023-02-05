@@ -19,6 +19,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"runtime/trace"
 	"sync"
 )
@@ -49,20 +50,35 @@ func main() {
 		}
 	}()
 
-	// В другой горутине производим обработку данных.
-	wg.Add(1)
+	// В 2-х других горутинах производим обработку данных.
+	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		defer close(resault)
+
 		for elem := range chIn {
 			resault <- elem * elem
+			// Вызываем планировщик.
+			runtime.Gosched()
 		}
+	}()
+
+	go func() {
+		defer wg.Done()
+
+		for elem := range chIn {
+			resault <- elem * elem
+			// Вызываем планировщик.
+			runtime.Gosched()
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(resault)
 	}()
 
 	// В главной горутине выводим результат на печать.
 	for elem := range resault {
 		fmt.Println(elem)
 	}
-
-	wg.Wait()
 }
